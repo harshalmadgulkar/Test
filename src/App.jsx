@@ -9,6 +9,7 @@ function App() {
 
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos');
+    console.log(savedTodos);
     if (savedTodos) {
       setTodoList(JSON.parse(savedTodos));
       setIsLoading(false);
@@ -26,13 +27,13 @@ function App() {
       const data = await response.json();
       console.log(data.todos.slice(0, 5));
       setTodoList(
-        data.todos.slice(0, 5).map((todo) => ({
+        data.todos.map((todo) => ({
           id: todo.id,
-          text: todo.todo,
+          todo: todo.todo,
           completed: todo.completed,
         }))
       );
-      localStorage.setItem('todos', JSON.stringify(data));
+      localStorage.setItem('todos', JSON.stringify(data.todos));
       setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
@@ -43,7 +44,7 @@ function App() {
   const handleAddTodo = (e) => {
     e.preventDefault();
     if (!isupdate && newTodo.trim() !== '') {
-      const newTodoItem = { id: Date.now(), text: newTodo, completed: false };
+      const newTodoItem = { id: Date.now(), todo: newTodo, completed: false };
       const updatedTodoList = [newTodoItem, ...todoList];
       setTodoList(updatedTodoList);
       localStorage.setItem('todos', JSON.stringify(updatedTodoList));
@@ -122,7 +123,7 @@ function App() {
                 todo.completed ? 'line-through text-gray-500' : ''
               }`}
             >
-              {todo.text}
+              {todo.todo}
             </span>
             <div className='flex justify-center gap-2'>
               {/* <button
